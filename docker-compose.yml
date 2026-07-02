@@ -1,0 +1,69 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: hireai-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hireai-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      target: production
+    container_name: hireai-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/hireai
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - '5000:5000'
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Mounting the Docker socket lets the backend's code-execution service
+    # (Coding Platform module) launch the language-runner containers
+    # defined in backend/src/docker/runners/*.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: hireai-frontend
+    restart: unless-stopped
+    ports:
+      - '5173:80'
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
+  redis-data:
