@@ -6,6 +6,7 @@ export type InterviewStatus = 'scheduled' | 'in_progress' | 'completed' | 'expir
 export interface IInterviewTurn {
   question: Types.ObjectId; // ref Question
   candidateAnswer: string;
+  aiMessage?: string;
   /** Adaptive engine note: which previous-turn signal influenced this question being asked */
   adaptiveReason?: string;
   score: number; // 0-10
@@ -34,6 +35,15 @@ export interface IInterview extends Document {
     weaknesses: string[];
     recommendation: 'strong_hire' | 'hire' | 'leaning_no' | 'no_hire';
   };
+  aiPersona?: {
+    difficulty: 'easy' | 'dynamic' | 'hard';
+    tone: 'friendly' | 'strict';
+  };
+  proctoringEvents?: Array<{
+    type: string;
+    timestamp: Date;
+    details?: string;
+  }>;
   /** Full transcript + reasoning trail powering the "AI interview replay" differentiator */
   transcriptUrl?: string;
   createdAt: Date;
@@ -44,6 +54,7 @@ const interviewTurnSchema = new Schema<IInterviewTurn>(
   {
     question: { type: Schema.Types.ObjectId, ref: 'Question', required: true },
     candidateAnswer: { type: String, default: '' },
+    aiMessage: { type: String },
     adaptiveReason: { type: String },
     score: { type: Number, default: 0 },
     strengths: [{ type: String }],

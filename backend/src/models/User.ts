@@ -20,6 +20,7 @@ export interface IUser extends Document {
   passwordResetExpires?: Date;
   tokenVersion: number;
   company?: Types.ObjectId; // for recruiters
+  githubUsername?: string; // for candidates
   isActive: boolean;
   lastLoginAt?: Date;
   createdAt: Date;
@@ -55,6 +56,7 @@ const userSchema = new Schema<IUser>(
     passwordResetExpires: { type: Date, select: false },
     tokenVersion: { type: Number, default: 0 },
     company: { type: Schema.Types.ObjectId, ref: 'Company' },
+    githubUsername: { type: String, trim: true },
     isActive: { type: Boolean, default: true },
     lastLoginAt: { type: Date },
   },

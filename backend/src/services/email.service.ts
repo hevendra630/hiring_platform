@@ -2,10 +2,13 @@ import nodemailer, { Transporter } from 'nodemailer';
 import { env } from '@config/env';
 import { logger } from '@utils/logger';
 
+import { createEvent, EventAttributes } from 'ics';
+
 interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
+  attachments?: { filename: string; content: string }[];
 }
 
 /**
@@ -26,14 +29,47 @@ class EmailService {
     });
   }
 
-  async send({ to, subject, html }: SendEmailParams): Promise<void> {
+  async send({ to, subject, html, attachments }: SendEmailParams): Promise<void> {
     if (!env.smtp.user) {
       // Dev fallback: log instead of sending, so the flow is testable without SMTP creds.
       logger.warn('SMTP not configured - logging email instead of sending', { to, subject });
       logger.debug(html);
       return;
     }
-    await this.transporter.sendMail({ from: env.smtp.from, to, subject, html });
+    await this.transporter.sendMail({ from: env.smtp.from, to, subject, html, attachments });
+  }
+
+  async sendInterviewInvite(to: string, name: string, jobTitle: string, scheduledAt: Date, durationMinutes: number, interviewUrl: string) {
+    const endAt = new Date(scheduledAt.getTime() + durationMinutes * 60000);
+    const event: EventAttributes = {
+      start: [scheduledAt.getFullYear(), scheduledAt.getMonth() + 1, scheduledAt.getDate(), scheduledAt.getHours(), scheduledAt.getMinutes()],
+      end: [endAt.getFullYear(), endAt.getMonth() + 1, endAt.getDate(), endAt.getHours(), endAt.getMinutes()],
+      title: `HireAI Interview: ${jobTitle}`,
+      description: `Join your interview here: ${interviewUrl}`,
+      location: 'HireAI Virtual Platform',
+      url: interviewUrl,
+      status: 'CONFIRMED',
+      organizer: { name: 'HireAI Recruitment', email: 'no-reply@hireai.com' }
+    };
+
+    let attachments: { filename: string; content: string }[] = [];
+    createEvent(event, (error, value) => {
+      if (!error && value) {
+        attachments.push({ filename: 'invite.ics', content: value });
+      } else {
+        logger.error('Failed to create ICS event', error);
+      }
+    });
+
+    await this.send({
+      to,
+      subject: `Interview Invitation: ${jobTitle}`,
+      html: `<p>Hi ${name},</p><p>You have been invited to an interview for <strong>${jobTitle}</strong>.</p>
+             <p>It is scheduled for ${scheduledAt.toLocaleString()} for ${durationMinutes} minutes.</p>
+             <p><a href="${interviewUrl}">Click here to join your interview</a></p>
+             <p>A calendar invite is attached.</p>`,
+      attachments
+    });
   }
 
   async sendVerificationEmail(to: string, name: string, verifyUrl: string) {

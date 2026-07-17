@@ -5,7 +5,8 @@ export type EmploymentType = 'full-time' | 'part-time' | 'internship' | 'contrac
 
 export interface IJob extends Document {
   title: string;
-  company: Types.ObjectId;
+  company: Types.ObjectId; // Original ref
+  companyName: string; // The text name of the company
   createdBy: Types.ObjectId;
   description: string;
   requiredSkills: string[];
@@ -18,7 +19,7 @@ export interface IJob extends Document {
   salaryMin?: number;
   salaryMax?: number;
   status: JobStatus;
-  codingRoundIds: Types.ObjectId[]; // CodingProblem refs used for this job's coding round
+  codingRoundIds: Types.ObjectId[];
   aiInterviewConfig: {
     enabled: boolean;
     technicalQuestionCount: number;
@@ -33,7 +34,8 @@ export interface IJob extends Document {
 const jobSchema = new Schema<IJob>(
   {
     title: { type: String, required: true, trim: true },
-    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true, index: true },
+    company: { type: Schema.Types.ObjectId, ref: 'Company', index: true },
+    companyName: { type: String, required: true, trim: true },
     createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     description: { type: String, required: true },
     requiredSkills: [{ type: String }],

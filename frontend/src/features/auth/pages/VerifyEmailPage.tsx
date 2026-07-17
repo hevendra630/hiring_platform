@@ -56,7 +56,7 @@ export function VerifyEmailPage() {
           <div className="space-y-4">
             <p className="text-danger">Verification failed</p>
             <p className="text-ink-muted text-sm">The verification link may be invalid or expired.</p>
-            <Link to="/login" className="text-primary hover:text-primary-hover transition">
+            <Link to="/login" className="text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)] hover:text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)]-hover transition">
               Back to login
             </Link>
           </div>

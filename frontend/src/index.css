@@ -3,8 +3,34 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    color-scheme: dark;
+  :root {
+    --bg-base: 255, 255, 255;
+    --bg-surface: 245, 245, 245;
+    --bg-raised: 230, 230, 230;
+    --border: 212, 212, 212;
+    --text-ink: 0, 0, 0;
+    --text-muted: 82, 82, 82;
+    --primary: 0, 0, 0;
+    --primary-hover: 82, 82, 82;
+  }
+
+  .dark {
+    --bg-base: 0, 0, 0;
+    --bg-surface: 15, 15, 15;
+    --bg-raised: 26, 26, 26;
+    --border: 51, 51, 51;
+    --text-ink: 255, 255, 255;
+    --text-muted: 163, 163, 163;
+    --primary: 255, 255, 255;
+    --primary-hover: 212, 212, 212;
+  }
+
+  body {
+    background-color: rgb(var(--bg-base));
+    color: rgb(var(--text-ink));
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   ::selection {
     background-color: theme('colors.primary.DEFAULT');

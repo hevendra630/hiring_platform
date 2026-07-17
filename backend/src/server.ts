@@ -1,4 +1,5 @@
 import 'tsconfig-paths/register';
+import '@models/index';
 import { createApp } from './app';
 import { env } from '@config/env';
 import { connectDB, disconnectDB } from '@config/db';
@@ -13,6 +14,9 @@ async function bootstrap() {
     logger.info(`HireAI API listening on port ${env.port} [${env.nodeEnv}]`);
     logger.info(`Swagger docs: http://localhost:${env.port}/api-docs`);
   });
+
+  const { initSocket } = require('./socket');
+  initSocket(server);
 
   const shutdown = async (signal: string) => {
     logger.info(`${signal} received - shutting down gracefully`);

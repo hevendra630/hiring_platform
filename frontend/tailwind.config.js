@@ -6,26 +6,27 @@ export default {
     extend: {
       colors: {
         base: {
-          DEFAULT: '#0B0F19', // app background - near-black navy
-          surface: '#131826', // card/panel surface
-          raised: '#1B2333', // hover/raised surface
-          border: '#262E42',
+          DEFAULT: 'rgb(var(--bg-base) / <alpha-value>)',
+          surface: 'rgb(var(--bg-surface) / <alpha-value>)',
+          raised: 'rgb(var(--bg-raised) / <alpha-value>)',
+          border: 'rgb(var(--border) / <alpha-value>)',
+          background: 'rgb(var(--bg-base) / <alpha-value>)',
         },
         primary: {
-          DEFAULT: '#6366F1', // indigo - primary actions, links
-          hover: '#818CF8',
-          muted: '#1E2150',
+          DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+          hover: 'rgb(var(--primary-hover) / <alpha-value>)',
+          muted: 'rgb(var(--border) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: '#34D399', // mint - scores, success, "live" signals
-          hover: '#6EE7B7',
+          DEFAULT: 'rgb(var(--text-ink) / <alpha-value>)',
+          hover: 'rgb(var(--text-muted) / <alpha-value>)',
         },
-        warn: '#FBBF24',
-        danger: '#F87171',
+        warn: 'rgb(var(--text-ink) / <alpha-value>)',
+        danger: 'rgb(var(--text-ink) / <alpha-value>)',
         ink: {
-          DEFAULT: '#E5E7EB', // primary text on dark surfaces
-          muted: '#94A3B8',
-          subtle: '#5B6478',
+          DEFAULT: 'rgb(var(--text-ink) / <alpha-value>)',
+          muted: 'rgb(var(--text-muted) / <alpha-value>)',
+          subtle: 'rgb(var(--border) / <alpha-value>)',
         },
       },
       fontFamily: {
@@ -37,7 +38,10 @@ export default {
         xl: '0.875rem',
       },
       boxShadow: {
-        glow: '0 0 0 1px rgba(99,102,241,0.35), 0 8px 24px -8px rgba(99,102,241,0.25)',
+        glow: 'none',
+        neon: 'none',
+        card: '0 4px 6px -1px rgb(var(--text-ink) / 0.1), 0 2px 4px -2px rgb(var(--text-ink) / 0.1)',
+        input: 'none',
       },
     },
   },

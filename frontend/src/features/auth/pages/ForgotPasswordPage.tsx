@@ -45,14 +45,14 @@ export function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full py-2 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition disabled:opacity-50"
+            className="w-full py-2 bg-primary shadow-neon hover:bg-primary shadow-neon-hover text-white font-medium rounded-lg transition disabled:opacity-50"
           >
             {mutation.isPending ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
 
         <p className="text-center text-ink-muted text-sm">
-          <Link to="/login" className="text-primary hover:text-primary-hover transition">
+          <Link to="/login" className="text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)] hover:text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)]-hover transition">
             Back to login
           </Link>
         </p>

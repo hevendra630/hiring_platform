@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu, LogOut } from 'lucide-react';
-import { toggleSidebar } from '@/store/uiSlice';
+import { Menu, LogOut, Sun, Moon } from 'lucide-react';
+import { toggleSidebar, setTheme } from '@/store/uiSlice';
 import { useLogout } from '@/features/auth/useAuth';
 import { RootState } from '@/store/store';
 import { LogoMark } from '@/components/ui/LogoMark';
@@ -19,7 +19,7 @@ interface SidebarProps {
 export function Sidebar({ items }: SidebarProps) {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { sidebarCollapsed } = useSelector((state: RootState) => state.ui);
+  const { sidebarCollapsed, theme } = useSelector((state: RootState) => state.ui);
   const { user } = useSelector((state: RootState) => state.auth);
   const logoutMutation = useLogout();
 
@@ -52,7 +52,7 @@ export function Sidebar({ items }: SidebarProps) {
               to={item.href}
               className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
                 isActive(item.href)
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary shadow-neon text-white'
                   : 'text-ink hover:bg-base-raised'
               }`}
               title={sidebarCollapsed ? item.label : undefined}
@@ -71,6 +71,15 @@ export function Sidebar({ items }: SidebarProps) {
               <p className="text-xs">{user?.email}</p>
             </div>
           )}
+          
+          <button
+            onClick={() => dispatch(setTheme(theme === 'dark' ? 'light' : 'dark'))}
+            className="w-full flex items-center gap-2 px-3 py-2 text-ink hover:bg-base-raised rounded-lg transition text-sm"
+            title="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {!sidebarCollapsed && <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>}
+          </button>
           <button
             onClick={() => logoutMutation.mutate()}
             disabled={logoutMutation.isPending}

@@ -65,7 +65,7 @@ export function ResetPasswordPage() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full py-2 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition disabled:opacity-50"
+            className="w-full py-2 bg-primary shadow-neon hover:bg-primary shadow-neon-hover text-white font-medium rounded-lg transition disabled:opacity-50"
           >
             {mutation.isPending ? 'Setting password...' : 'Set New Password'}
           </button>
