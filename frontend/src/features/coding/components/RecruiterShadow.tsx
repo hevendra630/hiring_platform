@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, Eye } from 'lucide-react';
 import { CodeEditor } from './CodeEditor';
+import { io } from 'socket.io-client';
 
 export function RecruiterShadow() {
   const { problemId, candidateId } = useParams<{ problemId: string, candidateId: string }>();
@@ -11,7 +12,7 @@ export function RecruiterShadow() {
   const [sourceCode, setSourceCode] = useState<string>('// Waiting for candidate to start typing...');
 
   useEffect(() => {
-    const { io } = require('socket.io-client');
+    // socket.io initialized via static import
     const socket = io('http://localhost:3000');
     
     const roomId = interviewId ? `room_interview_${interviewId}` : `room_coding_${problemId}_${candidateId}`;

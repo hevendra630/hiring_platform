@@ -34,7 +34,7 @@ export class AiService {
               headers: { 'User-Agent': 'HireAI-App' }
             });
             if (githubRes.ok) {
-              const repos = await githubRes.json();
+              const repos = await githubRes.json() as any[];
               if (repos && repos.length > 0) {
                 const repoStrings = repos.map((r: any) => `${r.name}: ${r.description || 'No description'}`).join('; ');
                 githubContext = ` The candidate has the following recent GitHub repositories: ${repoStrings}. Feel free to ask about them if relevant.`;

@@ -6,7 +6,7 @@ import { Play, Send, ChevronLeft, CheckCircle, XCircle, Clock } from 'lucide-rea
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-
+import { io } from 'socket.io-client';
 export function CodingWorkspace() {
   const { problemId } = useParams<{ problemId: string }>();
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export function CodingWorkspace() {
   // Socket.io for Collaborative Sandbox
   useEffect(() => {
     if (!user || user.role !== 'candidate') return;
-    const { io } = require('socket.io-client');
+    // Socket instance created with imported io
     const socket = io('http://localhost:3000'); // Assuming backend is on 3000
     
     // Use interviewId if available, otherwise problemId + userId
