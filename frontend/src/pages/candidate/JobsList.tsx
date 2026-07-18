@@ -8,6 +8,7 @@ interface IJob {
   _id: string;
   title: string;
   company: { _id: string; name: string; logoUrl?: string };
+  companyName?: string;
   location: string;
   isRemote: boolean;
   employmentType: string;
