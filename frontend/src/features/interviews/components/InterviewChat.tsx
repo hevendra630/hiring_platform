@@ -121,22 +121,65 @@ export function InterviewChat() {
     }
   };
 
+  const selectedVoiceNameRef = useRef<string | null>(null);
+
   const speak = (text: string) => {
     if (!isVoiceMode) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
     
-    const playVoice = () => {
+    const attemptSpeak = () => {
+      const utterance = new SpeechSynthesisUtterance(text);
       const voices = window.speechSynthesis.getVoices();
-      const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) || voices.find(v => v.lang.startsWith('en'));
-      if (englishVoice) utterance.voice = englishVoice;
+      
+      let voiceToUse = null;
+
+      // If we already locked in a voice for this interview, stick to it!
+      if (selectedVoiceNameRef.current) {
+        voiceToUse = voices.find(v => v.name === selectedVoiceNameRef.current);
+      }
+
+      // If no voice is locked in yet, pick the best available one
+      if (!voiceToUse) {
+        voiceToUse = voices.find(v => v.name === 'Google UK English Female') ||
+                     voices.find(v => v.name === 'Google US English') ||
+                     voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) ||
+                     voices.find(v => v.lang.startsWith('en'));
+                     
+        // Lock it in for the rest of the interview
+        if (voiceToUse) {
+          selectedVoiceNameRef.current = voiceToUse.name;
+        }
+      }
+
+      if (voiceToUse) {
+        utterance.voice = voiceToUse;
+      }
+      
       window.speechSynthesis.speak(utterance);
     };
 
-    if (window.speechSynthesis.getVoices().length === 0) {
-      window.speechSynthesis.onvoiceschanged = playVoice;
+    const voices = window.speechSynthesis.getVoices();
+    const hasPremiumVoices = voices.some(v => v.name.includes('Google'));
+
+    // If it's our very first time speaking, and we don't have premium voices loaded yet, 
+    // let's wait a fraction of a second for them to load to avoid locking in a bad robotic voice.
+    if (!selectedVoiceNameRef.current && !hasPremiumVoices && window.speechSynthesis.onvoiceschanged !== undefined) {
+      let hasSpoken = false;
+      window.speechSynthesis.onvoiceschanged = () => {
+        if (!hasSpoken) {
+          hasSpoken = true;
+          attemptSpeak();
+        }
+      };
+      // Fallback timeout in case the event never fires
+      setTimeout(() => {
+        if (!hasSpoken) {
+          hasSpoken = true;
+          attemptSpeak();
+        }
+      }, 500);
     } else {
-      playVoice();
+      attemptSpeak();
     }
   };
 
