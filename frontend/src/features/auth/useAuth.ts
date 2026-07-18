@@ -40,7 +40,21 @@ export function useLogin() {
     onError: (err: unknown) => toast.error(extractErrorMessage(err)),
   });
 }
-
+export function useGoogleLoginMutation() {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: (payload: { idToken: string; role?: 'candidate' | 'recruiter' }) =>
+      authApi.googleLogin(payload.idToken, payload.role),
+    onSuccess: (res) => {
+      if (!res.data) return;
+      dispatch(setCredentials({ user: res.data.user, accessToken: res.data.accessToken }));
+      toast.success('Welcome back!');
+      navigate(dashboardPathForRole(res.data.user.role));
+    },
+    onError: (err: unknown) => toast.error(extractErrorMessage(err)),
+  });
+}
 export function useLogout() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

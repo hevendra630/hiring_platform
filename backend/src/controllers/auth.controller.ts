@@ -11,7 +11,7 @@ function refreshCookieOptions() {
   return {
     httpOnly: true,
     secure: env.isProd,
-    sameSite: env.isProd ? ('strict' as const) : ('lax' as const),
+    sameSite: env.isProd ? ('none' as const) : ('lax' as const),
     path: '/api/v1/auth',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   };

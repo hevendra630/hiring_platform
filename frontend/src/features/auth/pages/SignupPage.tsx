@@ -28,89 +28,120 @@ export function SignupPage() {
   const onSubmit = (data: SignupForm) => signupMutation.mutate(data);
 
   return (
-    <div className="min-h-screen bg-base flex items-center justify-center px-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <LogoMark className="w-12 h-12" />
-          </div>
-          <h1 className="text-3xl font-bold font-display text-ink">Create Account</h1>
-          <p className="mt-2 text-ink-muted">Join HireAI to start your journey</p>
+    <div className="min-h-screen bg-[#0A0A0A] flex flex-row-reverse">
+      {/* Right Pane - Image (reversed for variety) */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-black items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/auth_background.png" 
+            alt="AI Concept Background" 
+            className="w-full h-full object-cover opacity-80"
+            style={{ transform: 'scaleX(-1)' }} // flip image for variety
+          />
+          <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-transparent"></div>
         </div>
+        <div className="relative z-10 max-w-lg p-12 glassmorphism rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(139,92,246,0.15)] mx-8">
+          <h2 className="text-4xl font-display font-bold text-white mb-6 leading-tight">
+            Build the future with <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HireAI</span>.
+          </h2>
+          <p className="text-gray-400 text-lg">
+            Join thousands of developers and recruiters bridging the gap between talent and opportunity through the power of AI.
+          </p>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-ink mb-1">Full Name</label>
-            <input
-              type="text"
-              {...register('name')}
-              className="w-full px-4 py-2 bg-base-surface border border-base-border rounded-lg text-ink placeholder-ink-subtle focus-visible:border-primary focus-visible:shadow-glow transition"
-              placeholder="Jane Doe"
-            />
-            {errors.name && <p className="text-danger text-sm mt-1">{errors.name.message}</p>}
-          </div>
+      {/* Left Pane - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 xl:p-24 relative overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-accent/10 blur-[120px] pointer-events-none"></div>
 
-          <div>
-            <label className="block text-sm font-medium text-ink mb-1">Email</label>
-            <input
-              type="email"
-              {...register('email')}
-              className="w-full px-4 py-2 bg-base-surface border border-base-border rounded-lg text-ink placeholder-ink-subtle focus-visible:border-primary focus-visible:shadow-glow transition"
-              placeholder="you@example.com"
-            />
-            {errors.email && <p className="text-danger text-sm mt-1">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-ink mb-1">Password</label>
-            <input
-              type="password"
-              {...register('password')}
-              className="w-full px-4 py-2 bg-base-surface border border-base-border rounded-lg text-ink placeholder-ink-subtle focus-visible:border-primary focus-visible:shadow-glow transition"
-              placeholder="••••••••"
-            />
-            {errors.password && <p className="text-danger text-sm mt-1">{errors.password.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-ink mb-2">I am a</label>
-            <div className="space-y-2">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  value="candidate"
-                  {...register('role')}
-                  className="w-4 h-4"
-                />
-                <span className="ml-3 text-ink">Candidate (looking for roles)</span>
-              </label>
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  value="recruiter"
-                  {...register('role')}
-                  className="w-4 h-4"
-                />
-                <span className="ml-3 text-ink">Recruiter (hiring engineers)</span>
-              </label>
+        <div className="w-full max-w-md space-y-10 relative z-10">
+          <div className="text-center lg:text-left">
+            <div className="lg:hidden flex justify-center mb-6">
+              <LogoMark className="w-14 h-14" />
             </div>
+            <h1 className="text-3xl sm:text-4xl font-bold font-display text-white tracking-tight">Create an account</h1>
+            <p className="mt-3 text-gray-400">Join HireAI to start your journey.</p>
           </div>
 
-          <button
-            type="submit"
-            disabled={signupMutation.isPending}
-            className="w-full py-2 bg-primary shadow-neon hover:bg-primary shadow-neon-hover text-white font-medium rounded-lg transition disabled:opacity-50"
-          >
-            {signupMutation.isPending ? 'Creating account...' : 'Create Account'}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
+              <input
+                type="text"
+                {...register('name')}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 backdrop-blur-sm"
+                placeholder="Jane Doe"
+              />
+              {errors.name && <p className="text-red-400 text-sm mt-1.5">{errors.name.message}</p>}
+            </div>
 
-        <p className="text-center text-ink-muted text-sm">
-          Already have an account?{' '}
-          <Link to="/login" className="text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)] hover:text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)]-hover transition">
-            Sign in
-          </Link>
-        </p>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">Email address</label>
+              <input
+                type="email"
+                {...register('email')}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 backdrop-blur-sm"
+                placeholder="name@company.com"
+              />
+              {errors.email && <p className="text-red-400 text-sm mt-1.5">{errors.email.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+              <input
+                type="password"
+                {...register('password')}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 backdrop-blur-sm"
+                placeholder="••••••••"
+              />
+              {errors.password && <p className="text-red-400 text-sm mt-1.5">{errors.password.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-3">I am a...</label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="relative flex cursor-pointer">
+                  <input
+                    type="radio"
+                    value="candidate"
+                    {...register('role')}
+                    className="peer sr-only"
+                  />
+                  <div className="w-full text-center py-3 px-4 rounded-xl border border-white/10 bg-white/5 text-gray-400 peer-checked:border-primary peer-checked:text-white peer-checked:bg-primary/10 transition-all duration-300">
+                    Candidate
+                  </div>
+                </label>
+                <label className="relative flex cursor-pointer">
+                  <input
+                    type="radio"
+                    value="recruiter"
+                    {...register('role')}
+                    className="peer sr-only"
+                  />
+                  <div className="w-full text-center py-3 px-4 rounded-xl border border-white/10 bg-white/5 text-gray-400 peer-checked:border-primary peer-checked:text-white peer-checked:bg-primary/10 transition-all duration-300">
+                    Recruiter
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={signupMutation.isPending}
+              className="w-full py-3 mt-4 bg-gradient-to-r from-primary to-accent text-white font-semibold rounded-xl hover:shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all duration-300 disabled:opacity-50 transform hover:-translate-y-0.5"
+            >
+              {signupMutation.isPending ? 'Creating account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <p className="text-center text-gray-400 text-sm mt-8">
+            Already have an account?{' '}
+            <Link to="/login" className="text-primary hover:text-accent font-medium transition-colors">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
