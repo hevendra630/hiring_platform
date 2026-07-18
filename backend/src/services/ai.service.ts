@@ -84,7 +84,7 @@ export class AiService {
       }
     }
 
-    const reply = this.mockAiResponse(message);
+    const reply = this.mockAiResponse(message, interview.turns.length);
     interview.turns.push({
       question: '000000000000000000000000' as any,
       aiMessage: reply,
@@ -100,15 +100,30 @@ export class AiService {
     return reply;
   }
 
-  private mockAiResponse(message: string): string {
+  private mockAiResponse(message: string, turnCount: number): string {
     const lower = message.toLowerCase();
-    if (lower.includes('hello') || lower.includes('hi')) {
+    
+    if (lower.includes('(time expired')) {
+      return 'I see we ran out of time for that one. Let us move on to the next question. Can you describe a time you had to optimize a piece of code for performance?';
+    }
+
+    if (turnCount === 0) {
       return 'Hello! I am your AI interviewer today. To get started, could you tell me about a recent challenging project you worked on?';
     }
-    if (lower.length < 50) {
-      return 'That sounds interesting. Could you elaborate a bit more on your specific role and the technologies you used?';
+    if (turnCount === 1) {
+      if (lower.length < 50) {
+        return 'Could you elaborate a bit more on your specific role and the technologies you used on that project?';
+      }
+      return 'Thank you for sharing that. Let us move on to the next question: how do you typically handle technical disagreements with your peers?';
     }
-    return 'Thank you for sharing that. Let us move on to the next question: how do you typically handle technical disagreements with your peers?';
+    if (turnCount === 2) {
+      return 'Interesting approach. Could you walk me through your understanding of how a modern web application scales?';
+    }
+    if (turnCount === 3) {
+      return 'Great explanation. For our final question, where do you see your technical focus shifting in the next two years?';
+    }
+    
+    return 'Thank you for those insights! We have concluded the questions for today. You can click End to complete your interview.';
   }
 }
 

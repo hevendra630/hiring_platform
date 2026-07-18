@@ -62,7 +62,7 @@ export function InterviewLobby() {
                       {interview.status.replace('_', ' ')}
                   </span>
                 </div>
-                <p className="text-ink-muted text-sm">{interview.company?.name || 'Company Name'} • {interview.durationMinutes} Minutes</p>
+                <p className="text-ink-muted text-sm">{(interview.job as any)?.companyName || 'Company Name'} • {interview.durationMinutes} Minutes</p>
                 <div className="flex flex-wrap gap-4 pt-2">
                   <span className="text-sm font-medium text-ink flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-primary drop-shadow-[0_0_5px_rgba(255,0,0,0.8)]" />

@@ -74,7 +74,7 @@ export function JobDetails() {
               )}
               <div>
                 <h1 className="text-3xl font-bold text-neutral-900">{job.title}</h1>
-                <p className="text-lg font-medium text-red-600 mt-1">{job.company?.name || 'Company Name'}</p>
+                <p className="text-lg font-medium text-red-600 mt-1">{job.companyName || 'Company Name'}</p>
               </div>
             </div>
             

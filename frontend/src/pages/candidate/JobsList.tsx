@@ -73,7 +73,7 @@ export function JobsList() {
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-xl font-semibold text-neutral-900 truncate">{job.title}</h3>
-                    <p className="text-sm font-medium text-red-600 mt-1">{job.company?.name || 'Company Name'}</p>
+                    <p className="text-sm font-medium text-red-600 mt-1">{job.companyName || 'Company Name'}</p>
                   </div>
                   {job.company?.logoUrl && (
                     <img src={job.company.logoUrl} alt={job.company.name} className="h-10 w-10 rounded object-cover border border-neutral-100" />

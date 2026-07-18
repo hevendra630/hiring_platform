@@ -125,10 +125,19 @@ export function InterviewChat() {
     if (!isVoiceMode) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'));
-    if (englishVoice) utterance.voice = englishVoice;
-    window.speechSynthesis.speak(utterance);
+    
+    const playVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) || voices.find(v => v.lang.startsWith('en'));
+      if (englishVoice) utterance.voice = englishVoice;
+      window.speechSynthesis.speak(utterance);
+    };
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = playVoice;
+    } else {
+      playVoice();
+    }
   };
 
   const sendMessage = useCallback(async (userMessage: string) => {

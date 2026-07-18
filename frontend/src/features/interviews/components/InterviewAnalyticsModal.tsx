@@ -93,7 +93,7 @@ export function InterviewAnalyticsModal({ interview, onClose }: InterviewAnalyti
               <p className="text-sm text-ink-muted">Out of 100</p>
             </div>
             
-            <div className="md:col-span-2 grid grid-cols-2 gap-4">
+            <div className="md:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
                <div className="bg-base-background border border-base-border rounded-xl p-4 flex flex-col justify-center">
                   <div className="flex items-center gap-2 text-ink mb-2">
                     <CheckCircle className="w-5 h-5 text-green-500" />
@@ -121,6 +121,13 @@ export function InterviewAnalyticsModal({ interview, onClose }: InterviewAnalyti
                     <span className="font-bold">Duration</span>
                   </div>
                   <span className="text-lg">{interview.durationMinutes} Minutes</span>
+               </div>
+               <div className="bg-base-background border border-base-border rounded-xl p-4 flex flex-col justify-center">
+                  <div className="flex items-center gap-2 text-ink mb-2">
+                    <Target className="w-5 h-5 text-red-500" />
+                    <span className="font-bold">Tab Switches</span>
+                  </div>
+                  <span className="text-lg">{(interview as any).proctoringEvents?.filter((e: any) => e.type === 'tab_switch').length || 0}</span>
                </div>
             </div>
           </div>
