@@ -1,4 +1,4 @@
-import 'tsconfig-paths/register';
+
 import '@models/index';
 import { createApp } from './app';
 import { env } from '@config/env';
