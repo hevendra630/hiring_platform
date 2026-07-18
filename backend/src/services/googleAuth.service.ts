@@ -1,8 +1,5 @@
-import { OAuth2Client } from 'google-auth-library';
 import { env } from '@config/env';
 import { ApiError } from '@utils/ApiError';
-
-const client = new OAuth2Client(env.google.clientId);
 
 export interface GoogleProfile {
   googleId: string;
@@ -13,17 +10,25 @@ export interface GoogleProfile {
 }
 
 /**
- * Verifies the ID token the frontend received from Google Identity Services,
- * and extracts a normalized profile. Throws if the token is invalid/expired
- * or wasn't issued for this app's client ID.
+ * Uses the Access Token the frontend received from Google Identity Services
+ * to fetch the user's profile from the Google UserInfo endpoint.
  */
-export async function verifyGoogleIdToken(idToken: string): Promise<GoogleProfile> {
+export async function verifyGoogleIdToken(accessToken: string): Promise<GoogleProfile> {
   try {
-    const ticket = await client.verifyIdToken({ idToken, audience: env.google.clientId });
-    const payload = ticket.getPayload();
+    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Google API returned ${response.status}`);
+    }
+
+    const payload = await response.json();
+
     if (!payload?.sub || !payload.email) {
       throw new Error('Incomplete Google profile payload');
     }
+    
     return {
       googleId: payload.sub,
       email: payload.email,
@@ -33,6 +38,6 @@ export async function verifyGoogleIdToken(idToken: string): Promise<GoogleProfil
     };
   } catch (error) {
     console.error('Google token verification failed:', error);
-    throw ApiError.unauthorized('Invalid Google ID token');
+    throw ApiError.unauthorized('Invalid Google access token');
   }
 }
