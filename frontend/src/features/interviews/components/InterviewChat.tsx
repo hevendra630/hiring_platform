@@ -332,7 +332,7 @@ export function InterviewChat() {
               }
             }}
             placeholder={isRecording ? "Listening..." : "Type your response or click the microphone to speak... (Press Enter to send)"}
-            className="flex-1 resize-none bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 min-h-[50px] max-h-[150px]"
+            className="flex-1 resize-none bg-neutral-50 border border-neutral-300 text-neutral-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 min-h-[50px] max-h-[150px]"
             rows={1}
           />
           <button 
