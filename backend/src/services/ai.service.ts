@@ -85,14 +85,32 @@ export class AiService {
     }
 
     const reply = this.mockAiResponse(message, interview.turns.length);
+    let score = 7;
+    let strengths = ['Clear communication'];
+    let weaknesses = ['Lacked depth'];
+    
+    if (message.length > 150) {
+      score = 9;
+      strengths = ['Detailed answer', 'Good technical depth'];
+      weaknesses = ['Could be more concise'];
+    } else if (message.length > 50) {
+      score = 8;
+      strengths = ['Addressed the core concepts'];
+      weaknesses = ['Could provide more specific examples'];
+    } else if (message.length < 10) {
+      score = 4;
+      strengths = ['Direct answer'];
+      weaknesses = ['Extremely brief, needs elaboration'];
+    }
+
     interview.turns.push({
       question: '000000000000000000000000' as any,
       aiMessage: reply,
       candidateAnswer: message,
-      score: 7,
-      strengths: ['Clear communication'],
-      weaknesses: ['Lacked depth'],
-      improvementSuggestions: ['Provide specific examples'],
+      score: score,
+      strengths: strengths,
+      weaknesses: weaknesses,
+      improvementSuggestions: ['Use the STAR method for behavioral questions.'],
       answeredAt: new Date()
     });
     await interview.save();
