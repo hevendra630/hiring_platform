@@ -31,7 +31,8 @@ export async function verifyGoogleIdToken(idToken: string): Promise<GoogleProfil
       avatarUrl: payload.picture,
       emailVerified: payload.email_verified ?? false,
     };
-  } catch {
+  } catch (error) {
+    console.error('Google token verification failed:', error);
     throw ApiError.unauthorized('Invalid Google ID token');
   }
 }
