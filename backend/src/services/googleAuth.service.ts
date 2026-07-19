@@ -1,4 +1,3 @@
-import { env } from '@config/env';
 import { ApiError } from '@utils/ApiError';
 
 export interface GoogleProfile {
@@ -23,7 +22,7 @@ export async function verifyGoogleIdToken(accessToken: string): Promise<GooglePr
       throw new Error(`Google API returned ${response.status}`);
     }
 
-    const payload = await response.json();
+    const payload = (await response.json()) as Record<string, any>;
 
     if (!payload?.sub || !payload.email) {
       throw new Error('Incomplete Google profile payload');
